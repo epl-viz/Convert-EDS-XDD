@@ -8,13 +8,13 @@ Convert::EDS::XDD - Convert CANopen EDS to XDD
 
 =head1 SYNOPSIS
 
-    perl -MConvert::EDS::XDD=eds2xdd -e "eds2xdd 'profile.eds'" > profile.xdd
+  perl -MConvert::EDS::XDD=eds2xdd -e "eds2xdd 'profile.eds'" > profile.xdd
 
 =head1 DESCRIPTION
 
 EDS and XDD are device profile formats based on C<ini|Config::Tiny> and C<XML|XML::Writer> respectively and are specified by the CiA e.V.
 
-This module Takes in an EDS file or a string with its content and returns a XDD string. By default, The C<ISO15745Profile> section is B<Ethernet POWERLINK> specific, but can be adjusted by the user. A self-contained script is available L<at the Github releases page|http://github.com/epl-viz/Convert::EDS::XDD>.
+This module Takes in an EDS file or a string with its content and returns a XDD string. By default, The C<ISO15745Profile> section is B<Ethernet POWERLINK> specific, but can be adjusted by the user. A self-contained (fatpacked) `epl2xdd` script is available L<at the Github releases page|https://github.com/epl-viz/Convert-EDS-XDD/releases/latest>.
 
 =head1 LIMITATIONS
 
@@ -26,14 +26,14 @@ May not handle all details of the EDS. Pull requests and reports (issues on Gith
 
 =item eds2xdd($filename, [$encoding])
 
-    Here, the [] indicate an optional parameter.
+Here, the [] indicate an optional parameter.
 
-    Returns the EDS' content as XML string on success or C<undef> on error
+Returns the EDS' content as XML string on success or C<undef> on error
 
-    $encoding may be used to indicate the encoding of the file, e.g. 'utf8' or
-    'encoding(iso-8859-1)'.
+$encoding may be used to indicate the encoding of the file, e.g. 'utf8' or
+'encoding(iso-8859-1)'.
 
-    Do not add a prefix to $encoding, such as '<' or '<:'.
+Do not add a prefix to $encoding, such as '<' or '<:'.
 
 =item eds2xdd_string($string)
 
@@ -48,8 +48,6 @@ L<http://github.com/epl-viz/Convert-EDS-XDD>
 =head1 SEE ALSO
 
 L<EPL-Viz - Visualization for Ethernet POWERLINK|http://github.com/epl-viz>
-
-L<App::eds2xdd> 
 
 =head1 AUTHOR
 

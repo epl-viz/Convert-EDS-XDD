@@ -9,10 +9,10 @@ my $eds = do {
     <DATA>
 };
 my @time = (
-    fileModificationDate => '',
-    fileModificationTime => '',
-    fileCreationDate => '',
-    fileCreationTime => '',
+    fileModificationDate => ' ',
+    fileModificationTime => ' ',
+    fileCreationDate => ' ',
+    fileCreationTime => ' ',
 );
 
 is eds2xdd_string('', @time), eds2xdd_string('', @time);
