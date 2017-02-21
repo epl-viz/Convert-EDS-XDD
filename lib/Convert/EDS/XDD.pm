@@ -31,7 +31,7 @@ Convert::EDS::XDD - Convert CANopen EDS to XDD
 
 EDS and XDD are device profile formats based on C<ini|Config::Tiny> and C<XML|XML::Writer> respectively and are specified by the CiA e.V.
 
-This module Takes in an EDS file or a string with its content and returns a XDD string. By default, The C<ISO15745Profile> section is B<Ethernet POWERLINK> specific, but can be adjusted by the user. A self-contained script is available L<at the Github releases page|http://github.com/epl-viz/Convert::EDS::XDD>.
+This module Takes in an EDS file or a string with its content and returns a XDD string. By default, The C<ISO15745Profile> section is B<Ethernet POWERLINK> specific, but can be adjusted by the user. A self-contained (fatpacked) `epl2xdd` script is available L<at the Github releases page|https://github.com/epl-viz/Convert-EDS-XDD/releases/latest>.
 
 =head1 LIMITATIONS
 
