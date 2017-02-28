@@ -1,11 +1,12 @@
 use Test::More;
+use Test::Exception;
 
 BEGIN {
     use_ok 'Convert::EDS::XDD', 'eds2xdd';
 }
 
-my $xdd = eds2xdd('DOES_NOT_EXIST');
-is $xdd, undef;
+throws_ok( sub { eds2xdd('DOES_NOT_EXIST') }, qr/failed/i );
+
 
 done_testing;
 

@@ -29,9 +29,9 @@ Convert::EDS::XDD - Convert CANopen EDS to XDD
 
 =head1 DESCRIPTION
 
-EDS and XDD are device profile formats based on C<ini|Config::Tiny> and C<XML|XML::Writer> respectively and are specified by the CiA e.V.
+EDS and XDD are device profile formats based on L<ini|Config::Tiny> and L<XML|XML::Writer> respectively and are specified by the CiA e.V.
 
-This module Takes in an EDS file or a string with its content and returns a XDD string. By default, The C<ISO15745Profile> section is B<Ethernet POWERLINK> specific, but can be adjusted by the user. A self-contained (fatpacked) `epl2xdd` script is available L<at the Github releases page|https://github.com/epl-viz/Convert-EDS-XDD/releases/latest>.
+This module Takes in an EDS file or a string with its content and returns a XDD string. By default, The C<ISO15745Profile> section is B<Ethernet POWERLINK> specific, but can be adjusted by the user. A self-contained (fatpacked) C<epl2xdd> script is available L<at the Github releases page|https://github.com/epl-viz/Convert-EDS-XDD/releases/latest>.
 
 =head1 LIMITATIONS
 
@@ -83,7 +83,9 @@ sub _extract {
 
 Here, the [] indicate an optional parameter.
 
-Returns the EDS' content as XML string on success or C<undef> on error
+Returns the EDS' content as XML string on success or undef on error in file contents.
+
+Function croaks if opening file fails.
 
 $encoding may be used to indicate the encoding of the file, e.g. 'utf8' or
 'encoding(iso-8859-1)'.
@@ -93,8 +95,19 @@ Do not add a prefix to $encoding, such as '<' or '<:'.
 =cut
 
 sub eds2xdd {
-    my $eds = Config::Tiny->read(@_) or return undef;
-    _eds2xdd($eds);
+    my($file, $encoding) = @_;
+    croak 'No file name provided' if !defined $file || $file eq '';
+
+    # Slurp in the file.
+    $encoding = $encoding ? "<:$encoding" : '<';
+    local $/;
+
+    open(my $eds, $encoding, $file) or croak "Failed to open file '$file' for reading: $!";
+    my $contents = <$eds>;
+    close($eds);
+
+    croak "Reading from '$file' returned undef" unless defined $contents;
+    eds2xdd_string($contents) or return undef;
 };
 
 my $template = do {
@@ -102,8 +115,17 @@ my $template = do {
     <DATA>
 };
 
-sub _eds2xdd {
-    my $eds = shift;
+
+=item eds2xdd_string($string)
+
+Returns the EDS string as XML string
+
+=cut
+
+sub eds2xdd_string {
+    my $str = shift;
+    $str =~ s/#.*//gm;
+    my $eds = Config::Tiny->read_string($str);
 
     my ($basename, $extension) = $eds->{FileInfo}->{FileName} =~ /^(.*)(\.[^.]*)/;
     $basename = undef;
@@ -197,17 +219,6 @@ sub _eds2xdd {
     $xdd =~ s/(\$\w+(?:\{\w+\})?)/$1/gee;
     return $xdd;
 }
-
-=item eds2xdd_string($string)
-
-Returns the EDS string as XML string
-
-=cut
-
-sub eds2xdd_string {
-    my $eds = Config::Tiny->read_string(@_);
-    _eds2xdd($eds);
-};
 
 sub _mktemplate {
     my $dt = DateTime->now();
