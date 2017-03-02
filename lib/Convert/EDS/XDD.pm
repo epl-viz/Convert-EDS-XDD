@@ -209,7 +209,9 @@ sub eds2xdd_string {
         }
     }
 
+    $writer->endTag("Object") if $in_sublist;
     $writer->endTag("ObjectList");
+
     my $ObjectList = $writer->end();
     my $xdd = $template;
     if ($xdd =~ s/^([ \t]+?)\$ObjectList/\$ObjectList/m) {
