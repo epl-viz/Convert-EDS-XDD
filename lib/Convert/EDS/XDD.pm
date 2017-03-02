@@ -170,7 +170,9 @@ sub eds2xdd_string {
     $writer->startTag("ObjectList");
 
     my ($in_sublist, $in_6000, $in_2000, $in_1000) = (0) x 4;
-    foreach my $section (sort keys %{$eds}) {
+    my @sections = (sort keys %{$eds});
+    foreach my $section_index (0 .. @sections - 1) {
+        my $section = $sections[$section_index];
         unless ($section =~ /([[:xdigit:]]{4})(?:sub([[:xdigit:]]))|([[:xdigit:]]{4})/) {
             carp "Ignoring unknown section $section\n";
             next;
@@ -197,11 +199,11 @@ sub eds2xdd_string {
             $in_sublist = 0;
 
             unshift @object, index => sprintf('%04X', hex($index));
-            if (not $obj->{SubNumber}) {
-                $writer->emptyTag("Object", @object);
-            } else {
+            if ($sections[$section_index+1] =~ /^${index}sub/) {
                 $writer->startTag("Object", @object);
                 $in_sublist = 1;
+            } else {
+                $writer->emptyTag("Object", @object);
             }
         } else {
             unshift @object, subIndex => sprintf('%02X', hex($subindex));
