@@ -1,5 +1,6 @@
 use strict;
 use warnings;
+use v5.10.0;
 package Convert::EDS::XDD;
 no warnings 'uninitialized';
 
@@ -25,7 +26,7 @@ Convert::EDS::XDD - Convert CANopen EDS to XDD
 
 =head1 SYNOPSIS
 
-  perl -MConvert::EDS::XDD=eds2xdd -e "eds2xdd 'profile.eds'" > profile.xdd
+  perl -MConvert::EDS::XDD=eds2xdd -e "print eds2xdd 'profile.eds'" > profile.xdd
 
 =head1 DESCRIPTION
 
