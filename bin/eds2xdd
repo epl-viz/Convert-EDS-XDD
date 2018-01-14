@@ -1,10 +1,36 @@
-=pod
+#!perl
+use strict;
+use warnings;
+# VERSION
 
-=encoding utf8
+use Getopt::Std;
+use Convert::EDS::XDD qw(eds2xdd_string);
+
+$Getopt::Std::STANDARD_HELP_VERSION = 1;
+
+getopts '', \my %opts;
+
+local $/;
+while (<>) {
+    print eds2xdd_string $_;
+}
+
+sub VERSION_MESSAGE() { print "Convert::EDS::XDD v$Convert::EDS::XDD::VERSION\n"; }
+sub HELP_MESSAGE() {
+print <<"EOT"
+Usage: $0 [eds_file]
+       echo 'eds_content' | $0
+
+Opens files passed as arguments and writes them to stdout as XDD.
+If there are no arguments, stdin is read
+EOT
+}
+
+=pod
 
 =head1 NAME
 
-Convert::EDS::XDD - Convert CANopen EDS to POWERLINK XDD
+eds2xdd - Command-line utility for L<Convert::EDS::XDD>
 
 =head1 SYNOPSIS
 
@@ -15,36 +41,13 @@ Convert::EDS::XDD - Convert CANopen EDS to POWERLINK XDD
 
 EDS is an L<ini|Config::Tiny> based format specified by the CiA e.V. in order to describe CANopen devices. The Ethernet POWERLINK Standardization Group specifies an EDS-based L<XML|XML::Writer> format for EPL devices.
 
-This module takes in an EDS file or a string with its content and returns a XDD string. An L<eds2xdd> wrapper script is also installed into the C<PATH>.
+This module takes in an EDS file or a string with its content and returns a XDD string. An L<eds2xdd> script (this one here) is also installed into the C<PATH>.
 
 C<eds2xdd> is also available as a self-contained (fatpacked) script L<at the Github releases page|https://github.com/epl-viz/Convert-EDS-XDD/releases/latest>.
 
 =head1 LIMITATIONS
 
 May not handle all details of the EDS. Pull requests and reports (L<issues on Github|https://github.com/epl-viz/Convert-EDS-XDD/issues>) are welcome.
-
-=head1 METHODS AND ARGUMENTS
-
-=over 4
-
-=item eds2xdd($filename, [$encoding])
-
-Here, the C<[]> indicate an optional parameter.
-
-Returns the EDS' content as XML string on success or undef on error in file contents.
-
-Function croaks if opening file fails.
-
-C<$encoding> may be used to indicate the encoding of the file, e.g. C<'utf8'> or
-C<'encoding(iso-8859-1)'>.
-
-Do not add a prefix to C<$encoding>, such as C<< '<' >> or C<< '<:' >>.
-
-=item eds2xdd_string($string)
-
-Returns the EDS string as XML string
-
-=back
 
 =head1 GIT REPOSITORY
 
@@ -64,5 +67,3 @@ Copyright (C) 2017-2018 Ahmad Fatoum
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
-
-=cut
